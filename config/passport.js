@@ -1,10 +1,8 @@
-// THis is a strategy
-
 var JwtStrategy = require('passport-jwt').Strategy
 var ExtractJwt = require('passport-jwt').ExtractJwt
 
 var User = require('../models/user')
-var config = require('./dbConfig')
+var config = require('./dbconfig')
 
 module.exports = function (passport) {
     var options = {}
