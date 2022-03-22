@@ -58,6 +58,24 @@ var functions = {
         else {
             return res.json({success: false, msg: 'No Headers.'})
         }
+    },
+    resetPassword: function (req, res) {
+        if(!req.body.password) {
+            res.json({success: false, msg: 'Please enter a valid password.'})
+        }
+        else { 
+            var newUser = User({
+                password: req.body.password
+            })
+            newUser.save(function (err, newUser) {
+                if (err) {
+                    res.json({success: false, msg: 'Failed to reset password.'})
+                } 
+                else {
+                    res.json({suceess: true, msg: 'Password was successfully reset.'})
+                }
+            })
+        }
     }
 }
 

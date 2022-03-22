@@ -20,4 +20,7 @@ router.post('/authenticate', actions.authenticate)
 // Obtaining information on a user
 router.get('/getinfo', actions.getinfo)
 
+// Password Reset
+router.post('/reset', actions.resetPassword)
+
 module.exports = router
