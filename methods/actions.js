@@ -60,6 +60,7 @@ var functions = {
         }
     },
     resetPassword: function (req, res) {
+        var user = decodetoken.User
         if(!req.body.password) {
             res.json({success: false, msg: 'Please enter a valid password.'})
         }
