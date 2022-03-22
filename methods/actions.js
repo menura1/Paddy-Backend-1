@@ -6,13 +6,16 @@ const { is } = require('express/lib/request')
 
 var functions = {
     addNew: function (req, res) {
-        if((!req.body.name) || (!req.body.password)) {
+        if((!req.body.email) || (!req.body.password) || (!req.body.name) || (!req.body.dateOfBirth) || (!req.body.phoneNumber)) {
             res.json({success: false, msg: 'Please enter all fields.'})
         }
         else {
             var newUser = User({
+                email: req.body.email,
+                password: req.body.password,
                 name: req.body.name,
-                password: req.body.password
+                dateOfBirth: req.body.dateOfBirth,
+                phoneNumber: req.body.phoneNumber
             })
             newUser.save(function (err, newUser) {
                 if (err) {
@@ -26,7 +29,7 @@ var functions = {
     },
     authenticate: function (req, res) {
         User.findOne({
-            name: req.body.name
+            email: req.body.email
         }, function (err, user) {
             if (err) throw err
             if (!user) {
@@ -50,7 +53,7 @@ var functions = {
         if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
             var token = req.headers.authorization.split(' ')[1]
             var decodetoken = jwt.decode(token, config.secret)
-            return res.json({success: true, msg: 'Hello ' + decodetoken.name})
+            return res.json({success: true, email: decodetoken.name})
         }
         else {
             return res.json({success: false, msg: 'No Headers.'})

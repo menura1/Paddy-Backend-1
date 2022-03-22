@@ -3,13 +3,22 @@ var Schema = mongoose.Schema
 var bcrypt = require('bcrypt')
 const { hash } = require('bcrypt')
 var userSchema = new Schema({
-    name: {
+    email: {
         type: String,
         require: true
     },
     password: {
         type: String,
         require: true
+    },name: {
+        type: String,
+        require: true
+    },dateOfBirth: {
+        type: String,
+        require: true
+    },phoneNumber: {
+        type: String,
+        require:true
     }
 })
 
