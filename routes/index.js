@@ -21,6 +21,6 @@ router.post('/authenticate', actions.authenticate)
 router.get('/getinfo', actions.getinfo)
 
 // Password Reset
-router.post('/reset', actions.resetPassword)
+router.post('/reset', actions.getinfo, actions.resetPassword)
 
 module.exports = router
