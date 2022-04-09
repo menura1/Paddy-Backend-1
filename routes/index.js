@@ -13,14 +13,19 @@ router.get('/dashboard', (req, res) => {
 // Adding a new user to the Database
 router.post('/adduser', actions.addNew)
 
+// Activating a user account through email
+router.post('/email-activate', actions.activateAccount)
+
 // Authenticating a user's password
 router.post('/authenticate', actions.authenticate)
-
 
 // Obtaining information on a user
 router.get('/getinfo', actions.getinfo)
 
+// Forgot password function
+router.put('/forgot-password', actions.forgotPassword)
+
 // Password Reset
-router.post('/reset', actions.getinfo, actions.resetPassword)
+router.put('/reset-password', actions.resetPassword)
 
 module.exports = router
