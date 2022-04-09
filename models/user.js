@@ -5,7 +5,8 @@ const { hash } = require('bcrypt')
 var userSchema = new Schema({
     email: {
         type: String,
-        require: true
+        require: true,
+        unique: true,
     },
     password: {
         type: String,
@@ -19,6 +20,9 @@ var userSchema = new Schema({
     },phoneNumber: {
         type: String,
         require:true
+    }, resetLink: {
+        data: String,
+        default: ''
     }
 })
 
