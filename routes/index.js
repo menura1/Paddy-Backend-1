@@ -3,7 +3,7 @@ const actions = require('../methods/actions')
 const router = express.Router()
 
 router.get('/', (req, res) => {
-    res.send('Hello World')
+    res.send('Welcome to Paddy - Server')
 })
 
 router.get('/dashboard', (req, res) => {
@@ -19,5 +19,8 @@ router.post('/authenticate', actions.authenticate)
 
 // Obtaining information on a user
 router.get('/getinfo', actions.getinfo)
+
+// Resetting a user's password
+router.put('/reset-password', actions.resetPassword)
 
 module.exports = router

@@ -1,4 +1,12 @@
 var jwt = require('jwt-simple')
+const otpGen = require('otp-generator')
+
+var mail_config = require('../config/mailconfig')
+const mailgun = require("mailgun-js")
+const req = require('express/lib/request')
+const API_KEY = 'f7b42fd8a3961454669dceef791e0cf9-0677517f-5ae865c9'
+const DOMAIN = 'sandboxb923388cd1cb4169be012c1f13551f43.mailgun.org'
+const mg = mailgun({apiKey: API_KEY, domain: DOMAIN})
 
 var User = require('../models/user')
 var config = require('../config/dbconfig')
@@ -6,13 +14,15 @@ const { is } = require('express/lib/request')
 
 var functions = {
     addNew: function (req, res) {
-        if((!req.body.name) || (!req.body.password)) {
+        if((!req.body.email) || (!req.body.password) || (!req.body.name) || (!req.body.phoneNumber)) {
             res.json({success: false, msg: 'Please enter all fields.'})
         }
         else {
             var newUser = User({
+                email: req.body.email,
+                password: req.body.password,
                 name: req.body.name,
-                password: req.body.password
+                phoneNumber: req.body.phoneNumber
             })
             newUser.save(function (err, newUser) {
                 if (err) {
@@ -26,7 +36,7 @@ var functions = {
     },
     authenticate: function (req, res) {
         User.findOne({
-            name: req.body.name
+            email: req.body.email
         }, function (err, user) {
             if (err) throw err
             if (!user) {
@@ -55,7 +65,62 @@ var functions = {
         else {
             return res.json({success: false, msg: 'No Headers.'})
         }
-    }
+    },
+    resetPassword: function(req, res) {
+        const email = req.body.email
+        User.findOne({email}, function (err, user) {
+            if (err || !user) {
+                res.status(400).send({success: false, msg: "User not found"})
+            } else {
+                const OTP = otpGen.generate(6, {upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false})
+                User.resetOTP = OTP
+                console.log(OTP)
+
+                const data = {
+                    from: 'noreply@hello.com',
+                    to: email,
+                    subject: 'Paddy - Reset Password OTP',
+                    html:`
+                    <h2>Please use the following OTP to reset your password.</h2>
+                    <p>OTP : ${OTP}</p>
+                    `
+                }
+
+                mg.messages().send(data, function (error, body) {
+                    if (error) {
+                        return res.json({success: false, msg: 'There was an error.'})
+                    } else {
+                        return res.json({message: 'Please check your email and follow the instructions to reset your password.'})  
+                    }  
+                })  
+            }
+        })
+    }, 
+    updatePassword: function(req, res) {
+        const email = req.body.email
+        const OTP = req.body.OTP
+        const newPassword = req.body.newPassword
+
+        User.findOne({email}, function (err, user) {
+            if (err) throw err
+            if (!user) {
+                res.status(403).send({success: false, msg: "User not found."})
+            }
+            else {
+                user.compareOTP(OTP, function(err, isMatch) {
+                    if (isMatch && !err) {
+                        //
+                        //
+                        res.json({success: true, msg: "Password was reset successfully."})
+                    }
+                    else {
+                        return res.status(403).send({success: false, msg: "Authentication failed. Wrong OTP."})
+                    }
+                })
+            }
+        }
+        )
+    }    
 }
 
 module.exports = functions
