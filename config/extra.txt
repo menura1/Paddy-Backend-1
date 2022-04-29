@@ -1,5 +1,0 @@
-{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindandModify: false 
-}
