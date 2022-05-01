@@ -22,7 +22,7 @@ var functions = {
             email: req.body.email
         }, function (err, user) {
             if (user) {
-                res.status(403).send({success: false, msg: "Authentication failed. User not found."})
+                res.status(403).send({success: false, msg: "The email has already been registered."})
             }   
             else {
                 var newUser = User({
