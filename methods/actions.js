@@ -1,12 +1,9 @@
 var jwt = require('jwt-simple')
 const otpGen = require('otp-generator')
-
+const req = require('express/lib/request')
 var mail_config = require('../config/mailconfig')
 const mailgun = require("mailgun-js")
-const req = require('express/lib/request')
-const API_KEY = 'f7b42fd8a3961454669dceef791e0cf9-0677517f-5ae865c9'
-const DOMAIN = 'sandboxb923388cd1cb4169be012c1f13551f43.mailgun.org'
-const mg = mailgun({apiKey: API_KEY, domain: DOMAIN})
+const mg = mailgun({apiKey: mail_config.MAILGUN_APIKEY, domain: mail_config.DOMAIN})
 
 var User = require('../models/user')
 var config = require('../config/dbconfig')
