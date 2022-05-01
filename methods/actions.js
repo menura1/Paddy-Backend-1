@@ -17,22 +17,30 @@ var functions = {
         if((!req.body.email) || (!req.body.password) || (!req.body.name) || (!req.body.phoneNumber)) {
             res.json({success: false, msg: 'Please enter all fields.'})
         }
-        else {
-            var newUser = User({
-                email: req.body.email,
-                password: req.body.password,
-                name: req.body.name,
-                phoneNumber: req.body.phoneNumber
-            })
-            newUser.save(function (err, newUser) {
-                if (err) {
-                    res.json({success: false, msg: 'Failed to save User.'})
-                } 
-                else {
-                    res.json({suceess: true, msg: 'User was successfully saved.'})
-                }
-            })
-        }
+
+        User.findOne({
+            email: req.body.email
+        }, function (err, user) {
+            if (user) {
+                res.status(403).send({success: false, msg: "Authentication failed. User not found."})
+            }   
+            else {
+                var newUser = User({
+                    email: req.body.email,
+                    password: req.body.password,
+                    name: req.body.name,
+                    phoneNumber: req.body.phoneNumber
+                })
+                newUser.save(function (err, newUser) {
+                    if (err) {
+                        res.json({success: false, msg: 'Failed to save User.'})
+                    } 
+                    else {
+                        res.json({suceess: true, msg: 'User was successfully saved.'})
+                    }
+                })
+            }
+        })
     },
     authenticate: function (req, res) {
         User.findOne({
@@ -53,8 +61,7 @@ var functions = {
                     }
                 })
             }
-        }
-        )
+        })
     },
     getinfo: function (req, res) {
         if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
