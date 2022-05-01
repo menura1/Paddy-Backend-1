@@ -109,8 +109,8 @@ var functions = {
             else {
                 user.compareOTP(OTP, function(err, isMatch) {
                     if (isMatch && !err) {
-                        //
-                        //
+                        user.password = newPassword
+                        console.log(user.password)
                         res.json({success: true, msg: "Password was reset successfully."})
                     }
                     else {
@@ -120,7 +120,35 @@ var functions = {
             }
         }
         )
-    }    
+    },
+    updateInfo: function(req, res) {
+        const email = req.body.email
+        const name = req.body.name
+        const phoneNumber = req.body.phoneNumber
+
+        User.findOne({email}, function (err, user) {
+            if (err) throw err
+            if (!user) {
+                res.status(403).send({success: false, msg: "User not found."})
+            }
+            else {
+                var updatingUser = User({
+                    name: req.body.name,
+                    phoneNumber: req.body.phoneNumber
+                })
+                updatingUser.save(function (err, updatingUser) {
+                    if (err) {
+                        res.json({success: false, msg: 'Failed to save User.'})
+                    } 
+                    else {
+                        res.json({suceess: true, msg: 'User was successfully saved.'})
+                    }
+                })
+            }
+        }
+        )
+        
+    }     
 }
 
 module.exports = functions

@@ -1,5 +1,5 @@
 module.exports = {
-    SERVER_URL: 'https://paddy-decode.herokuapp.com/' || 'http://http://localhost:3000/',
-    MAILGUN_APIKEY: 'f7b42fd8a3961454669dceef791e0cf9-0677517f-5ae865c9',
-    JWT_ACCKEY: 'encryptionismypassion'
+    SERVER_URL: 'https://my-app-rglqa.ondigitalocean.app/' || 'http://http://localhost:3000/',
+    MAILGUN_APIKEY: 'key-86282fc063d6e13a97ef1cbd4c9c7318',
 }
+
