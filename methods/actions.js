@@ -60,7 +60,7 @@ var functions = {
         if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
             var token = req.headers.authorization.split(' ')[1]
             var decodetoken = jwt.decode(token, config.secret)
-            return res.json({success: true, msg: 'Hello ' + decodetoken.name})
+            return res.json({success: true, name: decodetoken.name, email: decodetoken.email, phoneNumber: decodetoken.phoneNumber})
         }
         else {
             return res.json({success: false, msg: 'No Headers.'})
